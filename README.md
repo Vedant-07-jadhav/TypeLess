@@ -2,53 +2,55 @@
 
 > Voice-to-text at the speed of thought. Speak naturally anywhere on macOS and type less.
 
-TypeLess is a lightweight, native macOS speech-to-text utility powered by Whisper and AI language models. It enables system-wide voice dictation across any application—such as Slack, Notes, Xcode, VS Code, and web browsers—automatically inserting polished, punctuated text directly at your cursor.
+TypeLess is a lightweight, native macOS speech-to-text utility. It provides system-wide dictation across all Mac applications—including Slack, Notes, Xcode, VS Code, and web browsers—automatically formatting and inserting text directly at your cursor.
+
+> **Architecture & Privacy Notice**: TypeLess is a native Swift client that captures audio locally on your Mac and transcribes it via the cloud using your own **Groq** (`whisper-large-v3-turbo`) or **OpenAI** (`whisper-1`) API key. Using cloud-accelerated inference provides sub-second latency (~300ms) with zero local RAM/GPU overhead. Audio snippets are saved temporarily to `/tmp` and deleted immediately after processing.
 
 ---
 
 ## Features
 
-- **Sub-Second Latency**: Transcribes voice input in ~300ms using Groq-accelerated `whisper-large-v3-turbo` or OpenAI's `whisper-1`.
-- **Automatic Silence Detection**: Detects natural conversational pauses (~1.4 seconds) to automatically stop recording, transcribe, and insert text without manual keystrokes.
-- **Floating Interactive Widget**: A draggable, non-activating floating mic widget that stays accessible on-screen without stealing window focus from your active document or chat.
-- **Smart Formatting**: Post-processes raw speech to eliminate disfluencies (e.g., filler words like "um", "uh", "you know"), fix stutters, and structure grammar and punctuation while retaining original phrasing and vocabulary.
-- **Multiple Dictation Profiles**:
-  - **Smart Polish**: Formats natural speech into clean, punctuated prose.
-  - **Raw Dictation**: Direct, verbatim transcription from the speech model.
-  - **Bullet Points**: Converts continuous thoughts into actionable bulleted items.
-  - **Email Draft**: Structures voice streams into a standard email format.
-- **Native macOS Liquid Glass Design**: Built using native AppKit translucent materials (`NSVisualEffectView`) supporting System Appearance (automatically tracks macOS Light/Dark mode), explicit Dark Glass, and Light Glass themes.
-- **Global Shortcut**: System-wide trigger via `Option + Space` (configurable to `Cmd + Shift + Space`, `Control + Space`, or `F8`).
+- **Sub-Second Speed**: Transcribes speech in ~300ms via Groq's high-speed Whisper LPU inference or OpenAI Whisper.
+- **Automatic Silence Detection**: Detects natural conversational pauses (~1.4 seconds) to automatically stop recording, format text, and paste.
+- **Draggable Mic Widget**: A non-activating floating capsule with live animated audio equalizer bars that respond to your voice volume.
+- **Smart Formatting**: Post-processes raw speech to remove filler words ("um", "uh", "you know"), fix repetitions, and apply proper punctuation.
+- **Dictation Modes**:
+  - **Smart Polish**: Cleans conversational speech into structured, punctuated text.
+  - **Raw Dictation**: Exact verbatim Whisper transcription.
+  - **Bullet Points**: Converts continuous thoughts into bulleted action items.
+  - **Email Draft**: Formats spoken ideas into a clean email structure.
+- **Liquid Glass Interface**: Native macOS translucent styling (`NSVisualEffectView`) supporting System Appearance (auto Light/Dark), Dark Glass, and Light Glass.
+- **Global Shortcut**: Press `Option + Space` anywhere on macOS to dictate (configurable to `Cmd + Shift + Space`, `Control + Space`, or `F8`).
 
 ---
 
 ## Prerequisites
 
-- macOS 12.0 (Monterey) or later (Apple Silicon and Intel supported).
-- A free Groq API key (from [console.groq.com](https://console.groq.com)) or an OpenAI API key.
+- macOS 12.0 (Monterey) or later (Apple Silicon & Intel).
+- A free Groq API key from [console.groq.com/keys](https://console.groq.com/keys) (recommended: 14,400 free requests/day) or an OpenAI API key.
 
 ---
 
 ## Installation
 
-### Option 1: Using the Pre-Built Application
+### Option 1: Direct Download (Recommended)
 
-1. Download the latest `TypeLess-macOS.zip` release.
-2. Unzip the archive and move `TypeLess.app` to your `/Applications` directory.
-3. Launch `TypeLess.app`.
+1. Download the latest release: **[TypeLess-macOS.zip](https://github.com/Vedant-07-jadhav/TypeLess/releases/latest/download/TypeLess-macOS.zip)** (or browse [GitHub Releases](https://github.com/Vedant-07-jadhav/TypeLess/releases)).
+2. Unzip the file and move `TypeLess.app` into your `/Applications` folder.
+3. Open `TypeLess.app`.
 
-### Option 2: Building from Source
+### Option 2: Build From Source
 
-Ensure the Xcode Command Line Tools are installed:
+Ensure Xcode Command Line Tools are installed:
 
 ```bash
 xcode-select --install
 ```
 
-Clone the repository and run the build script:
+Clone the repository and build:
 
 ```bash
-git clone https://github.com/your-username/TypeLess.git
+git clone https://github.com/Vedant-07-jadhav/TypeLess.git
 cd TypeLess
 ./scripts/build.sh
 ```
@@ -61,27 +63,25 @@ To install directly to `/Applications`:
 
 ---
 
-## Configuration
+## Setup & Configuration
 
-1. Launch TypeLess. The Settings window will open automatically on first launch (or select **Settings...** from the menu bar item).
-2. Under **AI & Speech Provider**, paste your API key (Groq or OpenAI).
-3. Click **Test Connection** to verify API communication.
-4. Customize your preferred shortcut, dictation mode, and theme.
+1. Launch TypeLess. The Settings window will open automatically on first launch (or click the menu bar icon > **Settings...**).
+2. Under **AI & Speech Provider**, paste your Groq or OpenAI API key.
+3. Click **Test Connection** to confirm connectivity.
+4. Set your preferred global shortcut, dictation profile, and appearance theme.
 5. Click **Save & Apply**.
 
 ---
 
 ## macOS Permissions
 
-TypeLess requires standard macOS system permissions to operate:
+TypeLess requires two standard macOS permissions:
 
-1. **Microphone**: Needed to capture audio for speech recognition.
-   - *Prompt*: Requested on initial recording.
-   - *Path*: System Settings > Privacy & Security > Microphone.
-
-2. **Accessibility**: Needed to automatically insert transcribed text (`Cmd + V`) at the user's cursor across other applications.
-   - *Path*: System Settings > Privacy & Security > Accessibility.
-   - *Note*: If Accessibility is not enabled, TypeLess copies the transcribed text to your system clipboard, allowing manual pasting via `Cmd + V`.
+1. **Microphone**: Used to capture audio while dictating.
+   - *Prompted on first recording, or enable in System Settings > Privacy & Security > Microphone.*
+2. **Accessibility**: Used to simulate `Cmd + V` to insert transcribed text at your active cursor.
+   - *Enable in System Settings > Privacy & Security > Accessibility.*
+   - *Note: If Accessibility is disabled, TypeLess still copies the formatted text to your clipboard so you can paste manually.*
 
 ---
 
@@ -90,24 +90,25 @@ TypeLess requires standard macOS system permissions to operate:
 ```
 TypeLess/
 ├── TypeLess.app/          # Compiled macOS application bundle
-├── TypeLess-macOS.zip     # Distribution archive
-├── AppIcon.icns           # Native application icon
+├── TypeLess-macOS.zip     # Compressed release package
+├── AppIcon.icns           # Native macOS application icon
 ├── Info.plist             # macOS bundle configuration
 ├── src/
 │   ├── main.swift         # Application entry point
 │   ├── AppDelegate.swift  # Menu bar status item, menu lifecycle, state machine
-│   ├── AudioRecorder.swift# 16kHz AAC capture and voice activity / silence detection
-│   ├── WhisperService.swift# Speech-to-text API client and LLM post-processing
+│   ├── AudioRecorder.swift# Audio capture, metering, and silence detection
+│   ├── WhisperService.swift# Whisper transcription and LLM post-processing
 │   ├── HotkeyManager.swift# Carbon-based system-wide global hotkey handler
-│   ├── AutoPaster.swift   # Pasteboard management and simulated keystroke dispatch
-│   ├── FloatingHUD.swift  # Draggable, non-activating floating mic widget
+│   ├── AutoPaster.swift   # Pasteboard management and simulated keystrokes
+│   ├── FloatingHUD.swift  # Floating Dynamic Island widget with live visualizer
 │   ├── SettingsWindow.swift# Preferences window with Liquid Glass styling
-│   └── Config.swift       # Persistent UserDefaults configuration and themes
+│   └── Config.swift       # Persistent configuration and theme management
 ├── scripts/
-│   ├── build.sh           # Standalone Swift compiler and codesigning script
-│   ├── run.sh             # Launch / restart utility script
-│   ├── install.sh         # Copy to /Applications helper
+│   ├── build.sh           # Compiler and codesigning script
+│   ├── run.sh             # Launch and restart script
+│   ├── install.sh         # Helper to copy to /Applications
 │   └── package_dmg.sh     # Release packaging script
+├── LICENSE.md             # MIT License
 └── README.md
 ```
 
@@ -115,4 +116,4 @@ TypeLess/
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
