@@ -1,0 +1,26 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Build Artifacts & Binaries
+build/
+.build/
+*.app
+*.app/
+*.dSYM/
+*.dmg
+*.zip
+*.o
+*.swiftdoc
+*.swiftmodule
+*.swiftsourceinfo
+
+# Temporary Files & Audio Recordings
+*.m4a
+*.wav
+/tmp/swift-cache/
